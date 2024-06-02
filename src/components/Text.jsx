@@ -1,36 +1,25 @@
-import React, { useState, createRef } from 'react';
-import { Button } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
-import Text from '../components/Text';
-import { exportComponentAsJPEG } from 'react-component-export-image';
+ import React,{useState} from 'react'
+import Draggable from "react-draggable"
 
-const Edit = () => {
-  const [params] = useSearchParams();
-  const [count, setCount] = useState(0);
-  const memeRef = createRef();
 
-  const addText = () => {
-    setCount(count + 1);
-  };
+const Text = () => {
+
+        const [editMode,setEditMode]=useState(false);
+        const [val,setVal]=useState("Double Click to Edit");
+
+        const handleDoubleClick = () => {
+            setEditMode(true);
+          };
 
   return (
-    <div>
-      <div
-        style={{ width: '700px', border: '1px solid', height: '300px', position: 'relative' }}
-        ref={memeRef}
-        className="meme mt-5 mb-5"
-      >
-        <img src={params.get('url')} width="250px" alt="meme" />
-        {Array(count).fill(0).map((_, index) => (
-          <Text key={index} initialX={200} initialY={100} />
-        ))}
-      </div>
-      <Button onClick={addText}>Add Text</Button>
-      <Button variant="success" onClick={() => exportComponentAsJPEG(memeRef)}>
-        Save
-      </Button>
-    </div>
-  );
-};
+    <Draggable>
+    {editMode?<input onDoubleClick={(e)=>setEditMode(false)} value={val} onChange={(e)=>setVal(e.target.value)}/>:
+    <h1 onDoubleClick={handleDoubleClick} onTouchStart={handleDoubleClick}>{val}</h1>}
+    </Draggable>
+  )
+}
 
-export default Edit;
+export default Text
+
+
+
