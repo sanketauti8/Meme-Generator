@@ -1,42 +1,4 @@
-// import React,{useState,createRef} from 'react';
-// import { Button } from 'react-bootstrap';
-// import { useSearchParams } from 'react-router-dom';
-// import Text from '../components/Text';
-// import { exportComponentAsJPEG } from 'react-component-export-image';
 
-
-// const Edit = () => {
-//   const [params] = useSearchParams();
-//   //console.log(params.get("url"));
-//   const[count,setCount]=useState(0);
-//   const [editMode, setEditMode] = useState(false);
-
-//   const memeRef=createRef();
-
-//   const addText=()=>{
-//     setCount(count+1);
-//     setEditMode(true);
-//   }
-//   const handleOkClick = () => {
-//     setEditMode(false);
-//   };
-
-//   return (
-//     <div>
-//       <div style={{ width:"700px", border:"1px solid", height:"300px"}} ref={memeRef} className="meme mt-5 mb-5">
-//         <img src={params.get("url")} width="250px" alt="meme" />
-//         {
-//             Array(count).fill(0).map((e)=>(<Text editMode={editMode}/>))
-//         }
-//       </div>
-//       <Button onClick={addText}>Add Text</Button>
-//       <Button variant="success" onClick={(e)=>{exportComponentAsJPEG(memeRef)}}>Save</Button>
-//       <Button onClick={handleOkClick}>Ok</Button>
-//     </div>
-//   );
-// };
-
-// export default Edit;
 
 import React, { useState, createRef } from 'react';
 import { Button } from 'react-bootstrap';
@@ -61,9 +23,25 @@ const Edit = () => {
   };
 
   return (
-    <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh', justifyContent: 'center' }} >
-      <div style={{ width: "700px", border: "1px solid", height: "300px",marginBottom: '20px'  }} ref={memeRef} className="meme mt-5 mb-5">
-        <img src={params.get("url")} width="250px" alt="meme" />
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '10px' }}>
+      <div 
+        style={{ 
+          width: '100%', 
+          maxWidth: '700px', 
+          border: '1px solid', 
+          height: 'auto', 
+          overflow: 'hidden', 
+          marginBottom: '20px', 
+          position: 'relative' 
+        }} 
+        ref={memeRef} 
+        className="meme"
+      >
+        <img 
+          src={params.get("url")} 
+          style={{ width: '100%', height: 'auto', maxHeight: '300px' }} 
+          alt="meme" 
+        />
         {
           Array(count).fill(0).map((_, index) => (
             <Text 
@@ -73,11 +51,11 @@ const Edit = () => {
           ))
         }
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-      <Button onClick={addText}>Add Text</Button>
-      <Button variant="success" onClick={(e) => { exportComponentAsJPEG(memeRef) }}>Save</Button>
-      <Button onClick={handleOkClick}>Ok</Button>
-    </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+        <Button onClick={addText}>Add Text</Button>
+        <Button onClick={handleOkClick}>Ok</Button>
+        <Button variant="success" onClick={() => exportComponentAsJPEG(memeRef)}>Save</Button>
+      </div>
     </div>
   );
 };

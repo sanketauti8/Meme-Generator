@@ -1,0 +1,11 @@
+.meme img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
+  @media (min-width: 768px) {
+    .meme img {
+      max-height: 500px;
+    }
+  }

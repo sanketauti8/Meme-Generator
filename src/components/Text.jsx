@@ -1,58 +1,55 @@
-// import React, { useState, useEffect } from 'react';
-// import Draggable from "react-draggable";
 
-// const Text = ({ editMode }) => {
-//   const [localEditMode, setLocalEditMode] = useState(editMode);
-//   const [val, setVal] = useState("Double Click to Edit");
 
-//   useEffect(() => {
-//     setLocalEditMode(editMode);
-//   }, [editMode]);
-
-//   const handleDoubleClick = () => {
-//     setLocalEditMode(true);
-//   };
-
-//   return (
-//     <Draggable>
-//       {localEditMode
-//         ? <input 
-//             onDoubleClick={() => setLocalEditMode(false)} 
-//             value={val} 
-//             onChange={(e) => setVal(e.target.value)} 
-//           />
-//         : <h1 onDoubleClick={handleDoubleClick} onTouchStart={handleDoubleClick}>{val}</h1>}
-//     </Draggable>
-//   );
-// };
-
-// export default Text;
-import React, { useState, useEffect } from 'react';
-import Draggable from "react-draggable";
+import React, { useState, useEffect, useRef } from 'react';
+import Draggable from 'react-draggable';
 
 const Text = ({ editMode }) => {
-  const [localEditMode, setLocalEditMode] = useState(editMode);
-  const [val, setVal] = useState("Double Click to Edit");
+  const [isEditing, setIsEditing] = useState(editMode);
+  const [value, setValue] = useState('Double Click or Touch to Edit');
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    setLocalEditMode(editMode);
-  }, [editMode]);
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleDoubleClick = () => {
     if (editMode) {
-      setLocalEditMode(true);
+      setIsEditing(true);
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    if (editMode) {
+      e.preventDefault();
+      setIsEditing(true);
     }
   };
 
   return (
-    <Draggable>
-      {localEditMode
-        ? <input 
-            onDoubleClick={() => setLocalEditMode(false)} 
-            value={val} 
-            onChange={(e) => setVal(e.target.value)} 
+    <Draggable
+      handle={isEditing ? null : 'h1'} // Enable drag only on h1 when not editing
+      cancel={isEditing ? 'input' : null} // Disable drag on input when editing
+    >
+      <div>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={() => setIsEditing(false)}
           />
-        : <h1 onDoubleClick={handleDoubleClick} onTouchStart={handleDoubleClick}>{val}</h1>}
+        ) : (
+          <h1
+            onDoubleClick={handleDoubleClick}
+            onTouchStart={handleTouchStart}
+            style={{ cursor: editMode ? 'pointer' : 'default' }}
+          >
+            {value}
+          </h1>
+        )}
+      </div>
     </Draggable>
   );
 };
